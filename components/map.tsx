@@ -1,7 +1,7 @@
 "use client";
 
 import L from "leaflet";
-
+import "leaflet/dist/leaflet.css";
 import dynamic from "next/dynamic";
 
 // Dynamically import the MapContainer without SSR
@@ -22,10 +22,14 @@ const Marker = dynamic(
 
 // Fix default marker icons (for Next.js)
 const DefaultIcon = L.icon({
-  iconUrl: "/images/marker-icon.png",
-  iconRetinaUrl: "/images/marker-icon-2x.png",
-  shadowUrl: "/images/marker-shadow.png",
+  iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png",
+  iconRetinaUrl:
+    "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png",
+  shadowUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png",
   iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41],
 });
 
 L.Marker.prototype.options.icon = DefaultIcon;
@@ -39,9 +43,9 @@ const Map = () => {
       worldCopyJump={true}
     >
       <TileLayer
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        noWrap={true}
+        url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
+        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+        maxZoom={19}
       />
       <Marker position={[14.5995, 120.9842]} />
     </MapContainer>
