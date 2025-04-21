@@ -2,7 +2,9 @@
 
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
+import { Popup } from "react-leaflet";
 import dynamic from "next/dynamic";
+import { restrooms } from "@/lib/data";
 
 // Dynamically import the MapContainer without SSR
 const MapContainer = dynamic(
@@ -32,9 +34,29 @@ const DefaultIcon = L.icon({
   shadowSize: [41, 41],
 });
 
+// Different icon for clean restrooms
+const CleanIcon = L.icon({
+  ...DefaultIcon.options,
+  iconUrl:
+    "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png",
+});
+
+// Different icon for dirty restrooms
+const DirtyIcon = L.icon({
+  ...DefaultIcon.options,
+  iconUrl:
+    "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png",
+});
+
 L.Marker.prototype.options.icon = DefaultIcon;
 
 const Map = () => {
+  const getIcon = (cleanliness: number) => {
+    if (cleanliness >= 4) return CleanIcon;
+    if (cleanliness <= 2) return DirtyIcon;
+    return DefaultIcon;
+  };
+
   return (
     <MapContainer
       center={[14.5995, 120.9842]}
@@ -47,7 +69,28 @@ const Map = () => {
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
         maxZoom={19}
       />
-      <Marker position={[14.5995, 120.9842]} />
+      {restrooms.map((restroom) => (
+        <Marker
+          key={restroom.id}
+          position={restroom.position}
+          icon={getIcon(restroom.cleanliness)}
+        >
+          <Popup>
+            <div className="space-y-1">
+              <h3 className="font-bold">{restroom.name}</h3>
+              <p>
+                Cleanliness: {"★".repeat(restroom.cleanliness)}
+                {"☆".repeat(5 - restroom.cleanliness)}
+              </p>
+              <p>
+                Type: {restroom.type} ({restroom.paymentType})
+              </p>
+              <p>Gender: {restroom.gender.join(", ")}</p>
+              <p>Features: {restroom.features.join(", ") || "None"}</p>
+            </div>
+          </Popup>
+        </Marker>
+      ))}
     </MapContainer>
   );
 };
