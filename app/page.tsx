@@ -1,5 +1,6 @@
 import Filters from "@/components/filters";
 import MapWrapper from "@/components/map-wrapper";
+import Navbar from "@/components/navbar";
 
 export default function Home() {
   return (
@@ -11,6 +12,7 @@ export default function Home() {
       </div>
 
       <div className="flex-1">
+        <Navbar />
         <MapWrapper />
       </div>
     </div>
