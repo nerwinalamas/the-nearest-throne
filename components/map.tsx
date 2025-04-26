@@ -4,7 +4,7 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { Popup } from "react-leaflet";
 import dynamic from "next/dynamic";
-import { restrooms } from "@/lib/data";
+import { useRestroomStore } from "@/hooks/useRestroomStore";
 
 // Dynamically import the MapContainer without SSR
 const MapContainer = dynamic(
@@ -50,12 +50,16 @@ const DirtyIcon = L.icon({
 
 L.Marker.prototype.options.icon = DefaultIcon;
 
+const getIcon = (cleanliness: number) => {
+  if (cleanliness >= 4) return CleanIcon;
+  if (cleanliness <= 2) return DirtyIcon;
+  return DefaultIcon;
+};
+
 const Map = () => {
-  const getIcon = (cleanliness: number) => {
-    if (cleanliness >= 4) return CleanIcon;
-    if (cleanliness <= 2) return DirtyIcon;
-    return DefaultIcon;
-  };
+  const filteredRestrooms = useRestroomStore(
+    (state) => state.filteredRestrooms
+  );
 
   return (
     <MapContainer
@@ -69,7 +73,7 @@ const Map = () => {
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
         maxZoom={19}
       />
-      {restrooms.map((restroom) => (
+      {filteredRestrooms.map((restroom) => (
         <Marker
           key={restroom.id}
           position={restroom.position}
