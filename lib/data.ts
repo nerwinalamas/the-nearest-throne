@@ -1,13 +1,4 @@
-export interface Restroom {
-  id: number;
-  name: string;
-  position: [number, number];
-  cleanliness: number;
-  features: string[];
-  paymentType: "Free" | "Paid";
-  type: "Public" | "Private";
-  gender: string[];
-}
+import { Restroom } from "@/hooks/useRestroomStore";
 
 export const restrooms: Restroom[] = [
   {
