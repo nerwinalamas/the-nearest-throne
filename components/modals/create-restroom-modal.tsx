@@ -1,9 +1,10 @@
 "use client";
 
-import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useModalStore } from "@/hooks/useModalStore";
+import { useRestroomStore } from "@/hooks/useRestroomStore";
+import { restroomFormSchema, RestroomFormValues } from "@/lib/schema";
 import {
   ACCESSIBILITY_FEATURES,
   GENDER_OPTIONS,
@@ -41,22 +42,9 @@ const PHAddressSearch = dynamic(() => import("../ph-address-search"), {
   ssr: false,
 });
 
-export const restroomFormSchema = z.object({
-  name: z.string().min(1, "Name is required"),
-  latitude: z.number().min(-90).max(90),
-  longitude: z.number().min(-180).max(180),
-  cleanliness: z.number().min(1).max(5),
-  features: z.array(z.string()),
-  paymentType: z.enum(["Free", "Paid"]),
-  type: z.enum(["Public", "Private"]),
-  gender: z
-    .array(z.string())
-    .min(1, "At least one gender option must be selected"),
-});
-
-type RestroomFormValues = z.infer<typeof restroomFormSchema>;
-
 const CreateRestroom = () => {
+  const { addRestroom } = useRestroomStore();
+
   const { isOpen, onClose, type } = useModalStore();
   const isModalOpen = isOpen && type === "createRestroom";
 
@@ -74,7 +62,24 @@ const CreateRestroom = () => {
     },
   });
 
-  const onSubmit = () => {};
+  const onSubmit = (data: RestroomFormValues) => {
+    try {
+      const newRestroom = {
+        name: data.name,
+        position: [data.latitude, data.longitude] as [number, number],
+        cleanliness: data.cleanliness,
+        features: data.features,
+        paymentType: data.paymentType,
+        type: data.type,
+        gender: data.gender,
+      };
+
+      addRestroom(newRestroom);
+      handleDialogChange();
+    } catch (error) {
+      console.error("Error adding restroom:", error);
+    }
+  };
 
   const handleDialogChange = () => {
     onClose();
