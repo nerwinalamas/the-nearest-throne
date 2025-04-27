@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { restrooms } from "@/lib/data";
 
 export interface Restroom {
-  id: number;
+  id: string;
   name: string;
   position: [number, number];
   cleanliness: number;
@@ -28,6 +28,7 @@ interface RestroomState {
   setFilters: (filters: Partial<RestroomState["filters"]>) => void;
   resetFilters: () => void;
   applyFilters: () => void;
+  addRestroom: (restroom: Omit<Restroom, "id">) => void;
 }
 
 export const useRestroomStore = create<RestroomState>((set, get) => ({
@@ -113,5 +114,18 @@ export const useRestroomStore = create<RestroomState>((set, get) => ({
     });
 
     set({ filteredRestrooms: filtered });
+  },
+
+  addRestroom: (restroom) => {
+    const newRestroom = {
+      ...restroom,
+      id: "asdasdasd", // Generate unique ID here
+      position: restroom.position,
+    };
+    
+    set((state) => ({
+      restrooms: [...state.restrooms, newRestroom],
+      filteredRestrooms: [...state.filteredRestrooms, newRestroom],
+    }));
   },
 }));
