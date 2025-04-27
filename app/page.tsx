@@ -4,9 +4,9 @@ import Navbar from "@/components/navbar";
 
 export default function Home() {
   return (
-    <div className="h-screen mx-auto grid lg:grid-cols-[300px_1fr]">
-      <div className="p-4 rounded-lg space-y-4">
-        <h1 className="text-2xl font-bold mb-4">TheNearestThrone 🚽</h1>
+    <div className="h-screen flex flex-col xl:flex-row">
+      <div className="p-4 space-y-4 min-w-80">
+        <h1 className="text-2xl font-bold xl:mb-4">TheNearestThrone 🚽</h1>
 
         <Filters />
       </div>
