@@ -16,8 +16,8 @@ const Navbar = () => {
   };
 
   return (
-    <div className="p-4 flex items-center justify-between">
-      <div className="relative w-80">
+    <div className="p-4 flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+      <div className="relative md:w-80">
         <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
         <Input
           type="search"
