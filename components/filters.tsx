@@ -1,5 +1,12 @@
 "use client";
 
+import { useRestroomStore } from "@/hooks/useRestroomStore";
+import {
+  ACCESSIBILITY_FEATURES,
+  GENDER_OPTIONS,
+  PAYMENT_TYPES,
+  TOILET_TYPES,
+} from "@/lib/constants";
 import {
   Accordion,
   AccordionItem,
@@ -11,29 +18,6 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Slider } from "@/components/ui/slider";
-import { useRestroomStore } from "@/hooks/useRestroomStore";
-
-const ACCESSIBILITY_FEATURES = [
-  "Wheelchair Accessible",
-  "Hand Dryer",
-  "Paper Towels",
-  "Soap Available",
-  "Tabo",
-  "Bidet",
-];
-const PAYMENT_TYPES = ["Free", "Paid"];
-const TOILET_TYPES = [
-  "All",
-  "Public Restrooms Only",
-  "Private/Business Restrooms Only",
-];
-const GENDER_OPTIONS = [
-  "Male",
-  "Female",
-  "Gender-Neutral",
-  "All-Gender",
-  "Unisex",
-];
 
 const Filters = () => {
   const { filters, setFilters, applyFilters, resetFilters } =
@@ -71,7 +55,7 @@ const Filters = () => {
   };
 
   return (
-    <aside className="p-4 rounded-lg space-y-4">
+    <aside className="p-4 space-y-4 hidden xl:block">
       <Accordion type="multiple" className="w-full">
         {/* Cleanliness Rating */}
         <AccordionItem value="rating">
