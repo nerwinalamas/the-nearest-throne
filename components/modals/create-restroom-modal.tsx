@@ -13,6 +13,7 @@ import dynamic from "next/dynamic";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Slider } from "@/components/ui/slider";
 import {
   Dialog,
   DialogContent,
@@ -41,8 +42,10 @@ const PHAddressSearch = dynamic(() => import("../ph-address-search"), {
 });
 
 export const restroomFormSchema = z.object({
+  name: z.string().min(1, "Name is required"),
   latitude: z.number().min(-90).max(90),
   longitude: z.number().min(-180).max(180),
+  cleanliness: z.number().min(1).max(5),
   features: z.array(z.string()),
   paymentType: z.enum(["Free", "Paid"]),
   type: z.enum(["Public", "Private"]),
@@ -60,8 +63,10 @@ const CreateRestroom = () => {
   const form = useForm<RestroomFormValues>({
     resolver: zodResolver(restroomFormSchema),
     defaultValues: {
+      name: "",
       latitude: 14.5995,
       longitude: 120.9842,
+      cleanliness: 3,
       features: [],
       paymentType: "Free",
       type: "Public",
@@ -88,9 +93,24 @@ const CreateRestroom = () => {
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            {/* Name Field */}
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Name</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Restroom name" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
             {/* Address Search with Autocomplete */}
             <div className="space-y-2">
-              <FormLabel>Location</FormLabel>
+              <FormLabel>Address</FormLabel>
               <PHAddressSearch
                 onSelect={(result) => {
                   form.setValue("latitude", result.y);
@@ -193,6 +213,27 @@ const CreateRestroom = () => {
                 )}
               />
             </div>
+
+            {/* Cleanliness Slider */}
+            <FormField
+              control={form.control}
+              name="cleanliness"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Cleanliness: {field.value} ★</FormLabel>
+                  <FormControl>
+                    <Slider
+                      min={1}
+                      max={5}
+                      step={1}
+                      defaultValue={[field.value]}
+                      onValueChange={(vals) => field.onChange(vals[0])}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
             {/* Features Checkboxes */}
             <FormField
