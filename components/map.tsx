@@ -65,7 +65,7 @@ const Map = () => {
     <MapContainer
       center={[14.5995, 120.9842]}
       zoom={13}
-      className="h-full w-full"
+      className="h-full w-full z-0"
       worldCopyJump={true}
     >
       <TileLayer
