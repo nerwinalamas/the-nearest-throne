@@ -62,6 +62,8 @@ const CreateRestroom = () => {
     },
   });
 
+  const isSubmitting = form.formState.isSubmitting;
+
   const onSubmit = (data: RestroomFormValues) => {
     try {
       const newRestroom = {
@@ -88,7 +90,7 @@ const CreateRestroom = () => {
 
   return (
     <Dialog open={isModalOpen} onOpenChange={handleDialogChange}>
-      <DialogContent>
+      <DialogContent className="max-h-[90%] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Add New Restroom</DialogTitle>
           <DialogDescription>
@@ -106,7 +108,11 @@ const CreateRestroom = () => {
                 <FormItem>
                   <FormLabel>Name</FormLabel>
                   <FormControl>
-                    <Input placeholder="Restroom name" {...field} />
+                    <Input
+                      placeholder="Restroom name"
+                      {...field}
+                      disabled={isSubmitting}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -121,6 +127,7 @@ const CreateRestroom = () => {
                   form.setValue("latitude", result.y);
                   form.setValue("longitude", result.x);
                 }}
+                disabled={isSubmitting}
               />
             </div>
 
@@ -175,13 +182,20 @@ const CreateRestroom = () => {
                       defaultValue={field.value}
                     >
                       <FormControl>
-                        <SelectTrigger className="w-full">
+                        <SelectTrigger
+                          className="w-full"
+                          disabled={isSubmitting}
+                        >
                           <SelectValue placeholder="Select payment type" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
                         {PAYMENT_TYPES.map((payment) => (
-                          <SelectItem key={payment} value={payment}>
+                          <SelectItem
+                            key={payment}
+                            value={payment}
+                            className="hover:cursor-pointer"
+                          >
                             {payment}
                           </SelectItem>
                         ))}
@@ -204,13 +218,26 @@ const CreateRestroom = () => {
                       defaultValue={field.value}
                     >
                       <FormControl>
-                        <SelectTrigger className="w-full">
+                        <SelectTrigger
+                          className="w-full"
+                          disabled={isSubmitting}
+                        >
                           <SelectValue placeholder="Select restroom type" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="Public">Public</SelectItem>
-                        <SelectItem value="Private">Private</SelectItem>
+                        <SelectItem
+                          value="Public"
+                          className="hover:cursor-pointer"
+                        >
+                          Public
+                        </SelectItem>
+                        <SelectItem
+                          value="Private"
+                          className="hover:cursor-pointer"
+                        >
+                          Private
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -233,6 +260,8 @@ const CreateRestroom = () => {
                       step={1}
                       defaultValue={[field.value]}
                       onValueChange={(vals) => field.onChange(vals[0])}
+                      disabled={isSubmitting}
+                      className="hover:cursor-pointer"
                     />
                   </FormControl>
                   <FormMessage />
@@ -267,9 +296,10 @@ const CreateRestroom = () => {
                                         )
                                       );
                                 }}
+                                disabled={isSubmitting}
                               />
                             </FormControl>
-                            <FormLabel className="font-normal">
+                            <FormLabel className="font-normal hover:cursor-pointer">
                               {feature}
                             </FormLabel>
                           </FormItem>
@@ -309,9 +339,10 @@ const CreateRestroom = () => {
                                         )
                                       );
                                 }}
+                                disabled={isSubmitting}
                               />
                             </FormControl>
-                            <FormLabel className="font-normal">
+                            <FormLabel className="font-normal hover:cursor-pointer">
                               {gender}
                             </FormLabel>
                           </FormItem>
@@ -329,10 +360,13 @@ const CreateRestroom = () => {
                 type="button"
                 variant="outline"
                 onClick={handleDialogChange}
+                disabled={isSubmitting}
               >
                 Cancel
               </Button>
-              <Button type="submit">Submit</Button>
+              <Button type="submit" disabled={isSubmitting}>
+                {isSubmitting ? "Submitting..." : "Submit"}
+              </Button>
             </div>
           </form>
         </Form>
