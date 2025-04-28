@@ -12,9 +12,10 @@ interface Suggestions {
 
 interface PHAddressSearchProps {
   onSelect: (result: Suggestions) => void;
+  disabled: boolean;
 }
 
-const PHAddressSearch = ({ onSelect }: PHAddressSearchProps) => {
+const PHAddressSearch = ({ onSelect, disabled }: PHAddressSearchProps) => {
   const [query, setQuery] = useState("");
   const [suggestions, setSuggestions] = useState<Suggestions[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -51,13 +52,14 @@ const PHAddressSearch = ({ onSelect }: PHAddressSearchProps) => {
   return (
     <div className="relative w-full" ref={ref}>
       <Input
-        type="text"
+        type="search"
         value={query}
         onChange={(e) => {
           setQuery(e.target.value);
           setShowSuggestions(true);
         }}
         placeholder="Search address in Philippines..."
+        disabled={disabled}
       />
       {showSuggestions && suggestions.length > 0 && (
         <div className="absolute z-10 w-full mt-1 bg-white border rounded shadow-lg max-h-60 overflow-y-auto">
