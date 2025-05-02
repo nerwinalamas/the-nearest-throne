@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useRestroomStore } from "@/hooks/useRestroomStore";
 import {
   ACCESSIBILITY_FEATURES,
@@ -18,10 +19,20 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Slider } from "@/components/ui/slider";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
+import { Menu } from "lucide-react";
 
 const Filters = () => {
   const { filters, setFilters, applyFilters, resetFilters } =
     useRestroomStore();
+  const [isOpen, setIsOpen] = useState(false);
 
   const handleFeatureToggle = (feature: string) => {
     const newFeatures = filters.features.includes(feature)
@@ -54,8 +65,13 @@ const Filters = () => {
     setFilters({ genders: newGenders });
   };
 
-  return (
-    <aside className="p-4 space-y-4 hidden xl:block">
+  const handleApply = () => {
+    applyFilters();
+    setIsOpen(false);
+  };
+
+  const filtersContent = (
+    <div className="space-y-4">
       <Accordion type="multiple" className="w-full">
         {/* Cleanliness Rating */}
         <AccordionItem value="rating">
@@ -178,14 +194,46 @@ const Filters = () => {
       </Accordion>
 
       <div className="flex flex-col gap-2">
-        <Button className="w-full" onClick={applyFilters}>
+        <Button className="w-full" onClick={handleApply}>
           Apply Filters
         </Button>
         <Button variant="outline" className="w-full" onClick={resetFilters}>
           Reset
         </Button>
       </div>
-    </aside>
+    </div>
+  );
+
+  return (
+    <>
+      {/* Desktop View - Sidebar */}
+      <aside className="p-4 space-y-4 hidden xl:block w-80">
+        {filtersContent}
+      </aside>
+
+      {/* Mobile View - Drawer */}
+      <div className="xl:hidden fixed bottom-6 right-6 z-50">
+        <Drawer open={isOpen} onOpenChange={setIsOpen}>
+          <DrawerTrigger asChild>
+            <Button size="lg" className="rounded-full p-4 h-14 w-14 shadow-lg">
+              <Menu className="h-6 w-6" />
+            </Button>
+          </DrawerTrigger>
+          <DrawerContent className="h-[80%] px-4 pb-4">
+            <DrawerHeader className="sr-only">
+              <DrawerTitle>Filters</DrawerTitle>
+              <DrawerDescription>
+                Customize your restroom search
+              </DrawerDescription>
+            </DrawerHeader>
+            <div className="overflow-y-auto h-full">
+              <h2 className="text-xl font-bold pt-4 pb-2">Filters</h2>
+              {filtersContent}
+            </div>
+          </DrawerContent>
+        </Drawer>
+      </div>
+    </>
   );
 };
 
