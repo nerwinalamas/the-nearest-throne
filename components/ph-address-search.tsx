@@ -62,11 +62,11 @@ const PHAddressSearch = ({ onSelect, disabled }: PHAddressSearchProps) => {
         disabled={disabled}
       />
       {showSuggestions && suggestions.length > 0 && (
-        <div className="absolute z-10 w-full mt-1 bg-white border rounded shadow-lg max-h-60 overflow-y-auto">
+        <div className="absolute z-10 w-full mt-1 bg-background border rounded shadow-lg max-h-60 overflow-y-auto">
           {suggestions.map((item, i) => (
             <div
               key={i}
-              className="p-2 hover:bg-gray-100 cursor-pointer text-sm"
+              className="p-2 hover:bg-accent cursor-pointer text-sm"
               onClick={() => {
                 onSelect(item);
                 setQuery(item.label);
