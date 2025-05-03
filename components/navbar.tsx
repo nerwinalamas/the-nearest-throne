@@ -5,6 +5,7 @@ import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { useRestroomStore } from "@/hooks/useRestroomStore";
 import { useModalStore } from "@/hooks/useModalStore";
+import { ModeToggle } from "./mode-toggle";
 
 const Navbar = () => {
   const setSearchQuery = useRestroomStore((state) => state.setSearchQuery);
@@ -27,7 +28,10 @@ const Navbar = () => {
           onChange={handleSearchChange}
         />
       </div>
-      <Button onClick={() => onOpen("createRestroom")}>Add Location</Button>
+      <div className="flex items-center gap-2">
+        <Button onClick={() => onOpen("createRestroom")}>Add Location</Button>
+        <ModeToggle />
+      </div>
     </div>
   );
 };
