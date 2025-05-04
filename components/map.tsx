@@ -5,6 +5,7 @@ import "leaflet/dist/leaflet.css";
 import { Popup } from "react-leaflet";
 import dynamic from "next/dynamic";
 import { useRestroomStore } from "@/hooks/useRestroomStore";
+import { useDrawerStore } from "@/hooks/useDrawerStore";
 
 // Dynamically import the MapContainer without SSR
 const MapContainer = dynamic(
@@ -60,6 +61,7 @@ const Map = () => {
   const filteredRestrooms = useRestroomStore(
     (state) => state.filteredRestrooms
   );
+  const { onOpen } = useDrawerStore();
 
   return (
     <MapContainer
@@ -91,6 +93,12 @@ const Map = () => {
               </p>
               <p>Gender: {restroom.gender.join(", ")}</p>
               <p>Features: {restroom.features.join(", ") || "None"}</p>
+              <button
+                className="text-blue-500 hover:underline hover:cursor-pointer"
+                onClick={() => onOpen("viewReviews", restroom)}
+              >
+                View reviews
+              </button>
             </div>
           </Popup>
         </Marker>
