@@ -6,6 +6,7 @@ import { Popup } from "react-leaflet";
 import dynamic from "next/dynamic";
 import { useRestroomStore } from "@/hooks/useRestroomStore";
 import { useDrawerStore } from "@/hooks/useDrawerStore";
+import StarRating from "@/components/star-rating";
 
 // Dynamically import the MapContainer without SSR
 const MapContainer = dynamic(
@@ -84,10 +85,14 @@ const Map = () => {
           <Popup>
             <div className="space-y-1">
               <h3 className="font-bold">{restroom.name}</h3>
-              <p>
-                Cleanliness: {"★".repeat(restroom.cleanliness)}
-                {"☆".repeat(5 - restroom.cleanliness)}
-              </p>
+              <div className="flex items-center gap-1">
+                <span>Cleanliness:</span>
+                <StarRating
+                  rating={restroom.cleanliness}
+                  size="sm"
+                  className="inline-flex"
+                />
+              </div>
               <p>
                 Type: {restroom.type} ({restroom.paymentType})
               </p>
