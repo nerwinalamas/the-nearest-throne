@@ -2,7 +2,7 @@ import { Restroom } from "@/hooks/useRestroomStore";
 
 export const restrooms: Restroom[] = [
   {
-    id: 1,
+    id: "1",
     name: "SM Mall of Asia CR",
     position: [14.5354, 120.9821],
     cleanliness: 4,
@@ -12,7 +12,7 @@ export const restrooms: Restroom[] = [
     gender: ["Male", "Female", "Gender-Neutral"],
   },
   {
-    id: 2,
+    id: "2",
     name: "Robinsons Place Manila CR",
     position: [14.582, 120.9787],
     cleanliness: 3,
@@ -22,7 +22,7 @@ export const restrooms: Restroom[] = [
     gender: ["Male", "Female"],
   },
   {
-    id: 3,
+    id: "3",
     name: "Starbucks Ayala CR",
     position: [14.5507, 121.0137],
     cleanliness: 5,
@@ -32,7 +32,7 @@ export const restrooms: Restroom[] = [
     gender: ["Unisex"],
   },
   {
-    id: 4,
+    id: "4",
     name: "LRT Central Station CR",
     position: [14.5895, 120.9812],
     cleanliness: 2,
@@ -42,7 +42,7 @@ export const restrooms: Restroom[] = [
     gender: ["Male", "Female"],
   },
   {
-    id: 5,
+    id: "5",
     name: "Bonifacio High Street CR",
     position: [14.5534, 121.0247],
     cleanliness: 4,
@@ -52,7 +52,7 @@ export const restrooms: Restroom[] = [
     gender: ["All-Gender"],
   },
   {
-    id: 6,
+    id: "6",
     name: "Greenbelt 3 CR",
     position: [14.5546, 121.0244],
     cleanliness: 5,
@@ -62,7 +62,7 @@ export const restrooms: Restroom[] = [
     gender: ["Male", "Female", "Unisex"],
   },
   {
-    id: 7,
+    id: "7",
     name: "Ayala MRT Station CR",
     position: [14.5553, 121.0219],
     cleanliness: 3,
@@ -72,7 +72,7 @@ export const restrooms: Restroom[] = [
     gender: ["Male", "Female"],
   },
   {
-    id: 8,
+    id: "8",
     name: "Shangri-La Hotel CR",
     position: [14.5543, 121.0455],
     cleanliness: 5,
@@ -87,7 +87,7 @@ export const restrooms: Restroom[] = [
     gender: ["Unisex"],
   },
   {
-    id: 9,
+    id: "9",
     name: "Glorietta 5 CR",
     position: [14.5531, 121.0211],
     cleanliness: 4,
@@ -97,7 +97,7 @@ export const restrooms: Restroom[] = [
     gender: ["Male", "Female"],
   },
   {
-    id: 10,
+    id: "10",
     name: "Trinoma Mall CR",
     position: [14.6573, 121.0325],
     cleanliness: 3,
@@ -107,7 +107,7 @@ export const restrooms: Restroom[] = [
     gender: ["Male", "Female", "Gender-Neutral"],
   },
   {
-    id: 11,
+    id: "11",
     name: "UP Diliman Campus CR",
     position: [14.6567, 121.0742],
     cleanliness: 2,
@@ -117,7 +117,7 @@ export const restrooms: Restroom[] = [
     gender: ["Male", "Female"],
   },
   {
-    id: 12,
+    id: "12",
     name: "Mall of Asia Arena CR",
     position: [14.5359, 120.9819],
     cleanliness: 4,
@@ -127,7 +127,7 @@ export const restrooms: Restroom[] = [
     gender: ["All-Gender"],
   },
   {
-    id: 13,
+    id: "13",
     name: "Century City Mall CR",
     position: [14.5551, 121.0223],
     cleanliness: 4,
@@ -137,7 +137,7 @@ export const restrooms: Restroom[] = [
     gender: ["Male", "Female"],
   },
   {
-    id: 14,
+    id: "14",
     name: "Power Plant Mall CR",
     position: [14.5742, 121.0491],
     cleanliness: 5,
@@ -147,7 +147,7 @@ export const restrooms: Restroom[] = [
     gender: ["Unisex"],
   },
   {
-    id: 15,
+    id: "15",
     name: "Ortigas MRT Station CR",
     position: [14.5821, 121.0596],
     cleanliness: 3,
