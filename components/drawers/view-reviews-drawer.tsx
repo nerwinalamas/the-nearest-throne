@@ -107,12 +107,38 @@ const ViewReviewsDrawer = () => {
   const isDrawerOpen = isOpen && type === "viewReviews";
   const restroomData = isDrawerOpen ? (data as Restroom) : null;
 
-  //   const [filterRating, setFilterRating] = useState<string>("all");
-  //   const [reviews, setReviews] = useState<Review[]>(sampleReviews);
+  const [filterRating, setFilterRating] = useState<string>("all");
+  const [reviews, setReviews] = useState<Review[]>(sampleReviews);
   const [userRating, setUserRating] = useState(0);
+  const [reviewText, setReviewText] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const filterRating = "all";
-  const reviews = sampleReviews;
+  const handleSubmitReview = () => {
+    if (!reviewText.trim() || userRating === 0) return;
+
+    setIsSubmitting(true);
+
+    // Simulate API call
+    setTimeout(() => {
+      const newReview: Review = {
+        id: Math.max(...reviews.map((r) => r.id)) + 1,
+        user: {
+          name: "You", // Would be current user in real app
+          isVerified: true,
+        },
+        rating: userRating,
+        date: "Just now",
+        comment: reviewText,
+        likes: 0,
+        photos: [],
+      };
+
+      setReviews([newReview, ...reviews]);
+      setReviewText("");
+      setUserRating(0);
+      setIsSubmitting(false);
+    }, 1000);
+  };
 
   const handleDrawerChange = () => {
     onClose();
@@ -138,7 +164,7 @@ const ViewReviewsDrawer = () => {
           </SheetDescription>
 
           <div className="flex flex-col gap-4">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
               <div className="flex items-center">
                 <StarRating
                   rating={restroomData?.cleanliness ?? 0}
@@ -150,19 +176,19 @@ const ViewReviewsDrawer = () => {
               </div>
               <div className="flex items-center gap-3 text-sm text-gray-500">
                 <div>
-                  <span className="font-medium text-gray-900">{0}</span> reviews
+                  <span className="font-medium">{reviews.length}</span> reviews
                 </div>
                 <div>
-                  <span className="font-medium text-gray-900">{0}</span> visits
+                  <span className="font-medium">{0}</span> visits
                 </div>
               </div>
             </div>
 
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
               <h3 className="font-medium">All Reviews</h3>
-              <div className="flex items-center">
+              <div className="flex items-center justify-end">
                 <Filter className="h-4 w-4 mr-2 text-gray-500" />
-                <Select>
+                <Select value={filterRating} onValueChange={setFilterRating}>
                   <SelectTrigger className="w-[130px] h-8 text-sm">
                     <SelectValue placeholder="Filter by rating" />
                   </SelectTrigger>
@@ -178,7 +204,7 @@ const ViewReviewsDrawer = () => {
               </div>
             </div>
 
-            <div className="flex flex-col max-h-[48vh] overflow-y-auto gap-4">
+            <div className="flex flex-col h-28 sm:min-h-[48vh] lg:min-h-[60vh] xl:min-h-[48vh] overflow-y-auto gap-4">
               {filteredReviews.length > 0 ? (
                 filteredReviews.map((review) => (
                   <ReviewCard key={review.id} review={review} />
@@ -206,12 +232,27 @@ const ViewReviewsDrawer = () => {
                 <Textarea
                   placeholder="How was your experience? Was it clean? Any tips for others?"
                   className="min-h-[120px]"
+                  value={reviewText}
+                  onChange={(e) => setReviewText(e.target.value)}
+                  disabled={isSubmitting}
                 />
               </div>
 
-              <Button className="w-full">
-                <Send className="h-4 w-4 mr-2" />
-                Submit Review
+              <Button
+                className="w-full"
+                onClick={handleSubmitReview}
+                disabled={
+                  isSubmitting || !reviewText.trim() || userRating === 0
+                }
+              >
+                {isSubmitting ? (
+                  "Submitting..."
+                ) : (
+                  <>
+                    <Send className="h-4 w-4 mr-1" />
+                    Submit Review
+                  </>
+                )}
               </Button>
             </div>
           </div>
