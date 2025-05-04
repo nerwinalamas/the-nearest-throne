@@ -61,7 +61,7 @@ const ReviewCard = ({ review }: ReviewCardProps) => {
 
       <StarRating rating={review.rating} size="sm" className="mb-2" />
 
-      <p className="text-gray-700 text-sm mb-3">{review.comment}</p>
+      <p className="text-muted-foreground text-sm mb-3">{review.comment}</p>
 
       {review.photos && review.photos.length > 0 && (
         <div className="flex gap-2 mb-3">
@@ -79,14 +79,14 @@ const ReviewCard = ({ review }: ReviewCardProps) => {
       <Button
         variant="ghost"
         size="sm"
-        className={`text-xs h-7 px-2 ${
+        className={`text-xs h-7 px-2 hover:cursor-pointer ${
           review.hasLiked ? "text-blue-600" : "text-gray-500"
         }`}
         onClick={handleLike}
       >
         <ThumbsUp className="h-3.5 w-3.5 mr-1" />
         {review.likes > 0 && <span>{review.likes}</span>}
-        <span className="ml-1">{review.likes === 1 ? "Like" : "Likes"}</span>
+        <span>{review.likes === 1 ? "Like" : "Likes"}</span>
       </Button>
     </div>
   );
