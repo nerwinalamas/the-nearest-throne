@@ -2,15 +2,12 @@
 
 import { Search } from "lucide-react";
 import { Input } from "./ui/input";
-import { Button } from "./ui/button";
 import { useRestroomStore } from "@/hooks/useRestroomStore";
-import { useModalStore } from "@/hooks/useModalStore";
 import { ModeToggle } from "./mode-toggle";
 
 const Navbar = () => {
   const setSearchQuery = useRestroomStore((state) => state.setSearchQuery);
   const searchQuery = useRestroomStore((state) => state.searchQuery);
-  const { onOpen } = useModalStore();
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
@@ -29,7 +26,6 @@ const Navbar = () => {
         />
       </div>
       <div className="flex items-center gap-2">
-        <Button onClick={() => onOpen("createRestroom")}>Add Location</Button>
         <ModeToggle />
       </div>
     </div>
