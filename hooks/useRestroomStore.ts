@@ -16,6 +16,9 @@ interface RestroomState {
   restrooms: Restroom[];
   filteredRestrooms: Restroom[];
   searchQuery: string;
+  selectedRestroom: Restroom | null;
+  mapCenter: [number, number];
+  mapZoom: number;
   filters: {
     cleanliness: [number, number];
     features: string[];
@@ -29,12 +32,17 @@ interface RestroomState {
   resetFilters: () => void;
   applyFilters: () => void;
   addRestroom: (restroom: Omit<Restroom, "id">) => void;
+  setSelectedRestroom: (restroom: Restroom | null) => void;
+  setMapCenter: (center: [number, number], zoom?: number) => void;
 }
 
 export const useRestroomStore = create<RestroomState>((set, get) => ({
   restrooms: restrooms,
   filteredRestrooms: restrooms, // Initially show all restrooms
   searchQuery: "",
+  selectedRestroom: null, // Initialize selected restroom
+  mapCenter: [14.5995, 120.9842], // Default center (Quezon City)
+  mapZoom: 13, // Default zoom
   filters: {
     cleanliness: [1, 5], // Min and max cleanliness
     features: [],
@@ -45,6 +53,26 @@ export const useRestroomStore = create<RestroomState>((set, get) => ({
   setSearchQuery: (query) => {
     set({ searchQuery: query });
     get().applyFilters(); // Re-apply filters when search changes
+
+    // If there's a search query and filtered results, navigate to first result
+    if (query.trim() !== "") {
+      const filtered = get().filteredRestrooms;
+      if (filtered.length > 0) {
+        const firstResult = filtered[0];
+        set({
+          selectedRestroom: firstResult,
+          mapCenter: firstResult.position,
+          mapZoom: 16, // Zoom closer when searching
+        });
+      }
+    } else {
+      // Reset to default view when search is cleared
+      set({
+        selectedRestroom: null,
+        mapCenter: [14.5995, 120.9842],
+        mapZoom: 13,
+      });
+    }
   },
   setFilters: (newFilters) =>
     set((state) => ({
@@ -128,4 +156,10 @@ export const useRestroomStore = create<RestroomState>((set, get) => ({
       filteredRestrooms: [...state.filteredRestrooms, newRestroom],
     }));
   },
+  setSelectedRestroom: (restroom) => set({ selectedRestroom: restroom }),
+  setMapCenter: (center, zoom = 16) =>
+    set({
+      mapCenter: center,
+      mapZoom: zoom,
+    }),
 }));
