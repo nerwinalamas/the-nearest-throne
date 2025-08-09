@@ -4,7 +4,9 @@ import { Search } from "lucide-react";
 import { Input } from "./ui/input";
 import { Restroom, useRestroomStore } from "@/hooks/useRestroomStore";
 import { ModeToggle } from "./mode-toggle";
+import LocationButton from "./location-button";
 import { useState, useRef, useEffect } from "react";
+import { formatDistance } from "@/lib/distance";
 
 const Navbar = () => {
   const setSearchQuery = useRestroomStore((state) => state.setSearchQuery);
@@ -17,6 +19,7 @@ const Navbar = () => {
   );
   const setMapCenter = useRestroomStore((state) => state.setMapCenter);
   const restrooms = useRestroomStore((state) => state.restrooms);
+  const userLocation = useRestroomStore((state) => state.userLocation);
 
   const [showDropdown, setShowDropdown] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState(-1);
@@ -126,9 +129,16 @@ const Navbar = () => {
                 onMouseEnter={() => setHighlightedIndex(index)}
               >
                 <div className="font-medium">{restroom.name}</div>
-                <div className="text-sm text-muted-foreground">
-                  {restroom.type} • {restroom.paymentType} • ⭐{" "}
-                  {restroom.cleanliness}/5
+                <div className="text-sm text-muted-foreground flex items-center gap-2">
+                  <span>
+                    {restroom.type} • {restroom.paymentType} • ⭐{" "}
+                    {restroom.cleanliness}/5
+                  </span>
+                  {restroom.distance && userLocation && (
+                    <span className="text-blue-600 font-medium">
+                      • {formatDistance(restroom.distance)}
+                    </span>
+                  )}
                 </div>
               </div>
             ))}
@@ -142,8 +152,11 @@ const Navbar = () => {
         )}
       </div>
 
-      <div className="hidden md:flex items-center gap-2">
-        <ModeToggle />
+      <div className="flex items-center gap-2">
+        <LocationButton />
+        <div className="hidden md:block">
+          <ModeToggle />
+        </div>
       </div>
     </div>
   );
