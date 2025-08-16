@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useDrawerStore } from "@/hooks/useDrawerStore";
 import { Restroom } from "@/hooks/useRestroomStore";
-import { Filter, MapPin, Send } from "lucide-react";
+import { MapPin, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -12,13 +12,6 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import StarRating from "@/components/star-rating";
 import ReviewCard from "@/components/review-card";
@@ -28,7 +21,6 @@ interface Review {
   user: {
     name: string;
     avatar?: string;
-    isVerified: boolean;
   };
   rating: number;
   date: string;
@@ -43,7 +35,6 @@ const sampleReviews: Review[] = [
     id: 1,
     user: {
       name: "Mia S.",
-      isVerified: true,
     },
     rating: 5,
     date: "2 days ago",
@@ -56,7 +47,6 @@ const sampleReviews: Review[] = [
     id: 2,
     user: {
       name: "Juan D.",
-      isVerified: true,
     },
     rating: 5,
     date: "1 week ago",
@@ -68,7 +58,6 @@ const sampleReviews: Review[] = [
     id: 3,
     user: {
       name: "Ana L.",
-      isVerified: false,
     },
     rating: 4,
     date: "2 weeks ago",
@@ -80,7 +69,6 @@ const sampleReviews: Review[] = [
     id: 4,
     user: {
       name: "Carlo M.",
-      isVerified: true,
     },
     rating: 5,
     date: "3 weeks ago",
@@ -92,7 +80,6 @@ const sampleReviews: Review[] = [
     id: 5,
     user: {
       name: "Sophia R.",
-      isVerified: false,
     },
     rating: 3,
     date: "1 month ago",
@@ -107,7 +94,6 @@ const ViewReviewsDrawer = () => {
   const isDrawerOpen = isOpen && type === "viewReviews";
   const restroomData = isDrawerOpen ? (data as Restroom) : null;
 
-  const [filterRating, setFilterRating] = useState<string>("all");
   const [reviews, setReviews] = useState<Review[]>(sampleReviews);
   const [userRating, setUserRating] = useState(0);
   const [reviewText, setReviewText] = useState("");
@@ -124,7 +110,6 @@ const ViewReviewsDrawer = () => {
         id: Math.max(...reviews.map((r) => r.id)) + 1,
         user: {
           name: "You", // Would be current user in real app
-          isVerified: true,
         },
         rating: userRating,
         date: "Just now",
@@ -144,17 +129,10 @@ const ViewReviewsDrawer = () => {
     onClose();
   };
 
-  const filteredReviews =
-    filterRating === "all"
-      ? reviews
-      : reviews.filter(
-          (review) => review.rating === Number.parseInt(filterRating)
-        );
-
   return (
     <Sheet open={isDrawerOpen} onOpenChange={handleDrawerChange}>
-      <SheetContent className="sm:max-w-lg">
-        <SheetHeader>
+      <SheetContent className="sm:max-w-lg flex flex-col">
+        <SheetHeader className="flex-shrink-0">
           <SheetTitle className="sm:text-2xl font-bold">
             {restroomData?.name}
           </SheetTitle>
@@ -163,100 +141,77 @@ const ViewReviewsDrawer = () => {
             <span>{restroomData?.name}</span>
           </SheetDescription>
 
-          <div className="flex flex-col gap-4">
-            <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
-              <div className="flex items-center">
-                <StarRating
-                  rating={restroomData?.cleanliness ?? 0}
-                  className="mr-2"
-                />
-                <span className="text-lg font-medium">
-                  {restroomData?.cleanliness}.0
-                </span>
-              </div>
-              <div className="flex items-center gap-3 text-sm text-gray-500">
-                <div>
-                  <span className="font-medium">{reviews.length}</span> reviews
-                </div>
-                <div>
-                  <span className="font-medium">{0}</span> visits
-                </div>
-              </div>
+          <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+            <div className="flex items-center">
+              <StarRating
+                rating={restroomData?.cleanliness ?? 0}
+                className="mr-2"
+              />
+              <span className="text-lg font-medium">
+                {restroomData?.cleanliness}.0
+              </span>
             </div>
-
-            <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
-              <h3 className="font-medium">All Reviews</h3>
-              <div className="flex items-center justify-end">
-                <Filter className="h-4 w-4 mr-2 text-gray-500" />
-                <Select value={filterRating} onValueChange={setFilterRating}>
-                  <SelectTrigger className="w-[130px] h-8 text-sm">
-                    <SelectValue placeholder="Filter by rating" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Ratings</SelectItem>
-                    <SelectItem value="5">5 Stars</SelectItem>
-                    <SelectItem value="4">4 Stars</SelectItem>
-                    <SelectItem value="3">3 Stars</SelectItem>
-                    <SelectItem value="2">2 Stars</SelectItem>
-                    <SelectItem value="1">1 Star</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-
-            <div className="flex flex-col h-28 sm:min-h-[48vh] lg:min-h-[60vh] xl:min-h-[48vh] overflow-y-auto gap-4">
-              {filteredReviews.length > 0 ? (
-                filteredReviews.map((review) => (
-                  <ReviewCard key={review.id} review={review} />
-                ))
-              ) : (
-                <div className="text-center py-8 text-gray-500">
-                  No reviews match your filter criteria
-                </div>
-              )}
-            </div>
-
-            <div className="space-y-4">
+            <div className="flex items-center gap-3 text-sm text-gray-500">
               <div>
-                <h3 className="font-medium mb-2">Rate your experience</h3>
-                <StarRating
-                  rating={userRating}
-                  size="lg"
-                  onRatingChange={setUserRating}
-                  className="gap-1"
-                />
+                <span className="font-medium">{reviews.length}</span> reviews
               </div>
-
-              <div>
-                <h3 className="font-medium mb-2">Share your thoughts</h3>
-                <Textarea
-                  placeholder="How was your experience? Was it clean? Any tips for others?"
-                  className="min-h-[120px]"
-                  value={reviewText}
-                  onChange={(e) => setReviewText(e.target.value)}
-                  disabled={isSubmitting}
-                />
-              </div>
-
-              <Button
-                className="w-full"
-                onClick={handleSubmitReview}
-                disabled={
-                  isSubmitting || !reviewText.trim() || userRating === 0
-                }
-              >
-                {isSubmitting ? (
-                  "Submitting..."
-                ) : (
-                  <>
-                    <Send className="h-4 w-4 mr-1" />
-                    Submit Review
-                  </>
-                )}
-              </Button>
             </div>
           </div>
         </SheetHeader>
+
+        {/* Reviews section with flex-1 */}
+        <div className="flex-1 overflow-y-auto p-4">
+          {reviews.length > 0 ? (
+            <div className="space-y-4">
+              {reviews.map((review) => (
+                <ReviewCard key={review.id} review={review} />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-8 text-gray-500">
+              No reviews match your filter criteria
+            </div>
+          )}
+        </div>
+
+        {/* User rating section at bottom */}
+        <div className="flex-shrink-0 border-t p-4 space-y-4">
+          <div>
+            <h3 className="font-medium mb-2 text-sm">Rate your experience</h3>
+            <StarRating
+              rating={userRating}
+              size="lg"
+              onRatingChange={setUserRating}
+              className="gap-1"
+            />
+          </div>
+
+          <div>
+            <h3 className="font-medium mb-2 text-sm">Share your thoughts</h3>
+            <Textarea
+              placeholder="How was your experience? Was it clean? Any tips for others?"
+              className="min-h-[100px]"
+              value={reviewText}
+              onChange={(e) => setReviewText(e.target.value)}
+              disabled={isSubmitting}
+            />
+          </div>
+
+          <Button
+            className="w-full"
+            onClick={handleSubmitReview}
+            disabled={isSubmitting || !reviewText.trim() || userRating === 0}
+          >
+            {isSubmitting ? (
+              "Submitting..."
+            ) : (
+              <>
+                <Send className="h-4 w-4 mr-1" />
+                Submit Review
+              </>
+            )}
+          </Button>
+        </div>
       </SheetContent>
     </Sheet>
   );
