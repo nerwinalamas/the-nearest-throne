@@ -1,19 +1,17 @@
-import Filters from "@/components/filters";
-import MapWrapper from "@/components/map-wrapper";
+import Sidebar from "@/components/sidebar";
 import Navbar from "@/components/navbar";
+import MapWrapper from "@/components/map-wrapper";
 
 export default function Home() {
   return (
     <div className="h-screen flex flex-col xl:flex-row">
-      <div className="p-4 space-y-4 min-w-80">
-        <h1 className="text-2xl font-bold xl:mb-4">TheNearestThrone 🚽</h1>
+      <Sidebar />
 
-        <Filters />
-      </div>
-
-      <div className="flex-1">
+      <div className="flex-1 flex flex-col overflow-hidden">
         <Navbar />
-        <MapWrapper />
+        <div className="flex-1 overflow-hidden">
+          <MapWrapper />
+        </div>
       </div>
     </div>
   );
